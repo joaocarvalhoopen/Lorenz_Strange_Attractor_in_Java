@@ -27,6 +27,7 @@ Lorenz discovered in 1963 the butter fly effect while studying the weather model
 
 ## References
 * [Lorenz System (Wikipedia)](https://en.wikipedia.org/wiki/Lorenz_system)
+* [Butterfly effect (wikipedia)](https://en.wikipedia.org/wiki/Butterfly_effect)
 * [Programming the Lorenz Attractor](https://www.algosome.com/articles/lorenz-attractor-programming-code.html)
 
 ## License
