@@ -85,7 +85,7 @@ public class LorenzStrangeAttractor {
         Point3D[] ptsArray = new Point3D[maxNumSteps];
         for (int i=0; i < maxNumSteps; i++){
             ptsArray[i] = calcNextPoint();
-            System.out.println(ptsArray[i]);
+            //System.out.println(ptsArray[i]);
         }
         return ptsArray;
     }
