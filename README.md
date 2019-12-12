@@ -10,7 +10,7 @@ Lorenz discovered in 1963 the butter fly effect while studying the weather model
 Click on the image to see the animation of the trajectory. <br>
 ![Alt text](./lorenz_strange_attractor.svg)
 
-## Lorenz strange attractor differential equations.
+## Lorenz strange attractor ordinary differential equations.
 ```
        Fixed parameters:
        sigma = 10
