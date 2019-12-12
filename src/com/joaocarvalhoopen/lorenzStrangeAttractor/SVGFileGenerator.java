@@ -53,30 +53,41 @@ public class SVGFileGenerator {
             writer.print(getHeader());
             writer.print(getBackground());
             for (Point3D pt3D : ptsArray) {
-                double cx = 250 + 8 * pt3D.x;
-                double cy = 35  + 8 * pt3D.z;
+                double cx = transformX(pt3D.x);
+                double cy = transformZ(pt3D.z);
                 double r = 2;
                 writer.print(genCircle(cx, cy, r));
             }
+            writer.print(genPath(ptsArray));
             writer.print(getFooter());
         } catch(IOException ex) {
             System.out.println("Error while writting to SVG file!");
         } finally {
             writer.close();
         }
-}
+    }
+
+    private double transformX(double x){
+        return 250 + 8 * x;
+    }
+
+    private double transformZ(double z){
+        return 35  + 8 * z;
+    }
 
     /*
     <svg version="1.1"
          baseProfile="full"
          width="300" height="300"
-         xmlns="http://www.w3.org/2000/svg">
+         xmlns="http://www.w3.org/2000/svg"
+         "xmlns:xlink=\"http://www.w3.org/1999/xlink\">
     */
     private String getHeader() {
         String header = "<svg version=\"1.1\"\n" +
                         "baseProfile=\"full\"\n" +
                         "width=\"500\" height=\"500\"\n" +
-                        "xmlns=\"http://www.w3.org/2000/svg\">\n";
+                        "xmlns=\"http://www.w3.org/2000/svg\"\n" +
+                        "xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n";
 
         return header;
     }
@@ -87,9 +98,30 @@ public class SVGFileGenerator {
         return background;
     }
 
+    /*
+        <circle id="circle" cx="0" cy="0" r="3" fill="yellow" />
+
+        <animateMotion
+                xlink:href="#circle"
+                dur="3s"
+                begin="0s"
+                fill="freeze"
+                repeatCount="indefinite">
+            <mpath xlink:href="#motionPath" />
+        </animateMotion>
+    */
     // </svg>
     private String getFooter() {
-        String footer = "</svg>\n";
+        String footer = "\n" +
+                        "    <animateMotion\n" +
+                        "            xlink:href=\"#circle\"\n" +
+                        "            dur=\"20s\"\n" +
+                        "            begin=\"0s\"\n" +
+                        "            fill=\"freeze\"\n" +
+                        "            repeatCount=\"indefinite\">\n" +
+                        "        <mpath xlink:href=\"#motionPath\" />\n" +
+                        "    </animateMotion>" +
+                        "</svg>\n";
         return footer;
     }
 
@@ -98,6 +130,37 @@ public class SVGFileGenerator {
         String circle = String.format(Locale.ROOT,
                 "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"%.2f\" fill=\"blue\" />\n", cx, cy, r);
         return circle;
+    }
+
+    /*
+     <path id="motionPath" fill="none" stroke="#000000" d="M0,0L100,100L200,200" />
+     */
+    private String genPath(Point3D[] ptsArray) {
+        double curX = transformX(ptsArray[0].x);
+        double curZ = transformZ(ptsArray[0].z);
+        StringBuffer sBuf = new StringBuffer(10000);
+        // String pathBegin = "<path id=\"motionPath\" fill=\"none\" stroke=\"#000000\" d=\"M" +
+        String pathBegin = "<path id=\"motionPath\" fill=\"none\" d=\"M" +
+                String.format(Locale.ROOT, "%.2f,%.2f\n",
+                curX,
+                curZ);
+        sBuf.append(pathBegin);
+        for(int i = 0; i < ptsArray.length; i++ ){
+            curX = transformX(ptsArray[i].x);
+            curZ = transformZ(ptsArray[i].z);
+            sBuf.append("L");
+            sBuf.append(curX);
+            sBuf.append(",");
+            sBuf.append(curZ);   // it's translateY in the SVG path.
+            sBuf.append("\n");
+        }
+        String pathEnd = "\" />\n";
+        sBuf.append(pathEnd);
+        sBuf.append(String.format(Locale.ROOT,
+                "<circle id=\"circle\" cx=\"%.2f\" cy=\"%.2f\" r=\"3\" fill=\"yellow\" />\n",
+                 0.0,
+                        0.0));
+        return sBuf.toString();
     }
 
     // <text x="150" y="125" font-size="60" text-anchor="middle" fill="white">SVG</text>
