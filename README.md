@@ -7,6 +7,7 @@ It makes all the calculations for 1500 iteration steps and then generates an SVG
 Lorenz discovered in 1963 the butter fly effect while studying the weather models by simplifying the equations to it's simplest form that would generate a chaotic system.
 
 ## Trajectory image for the first 1500 steps, with a step of 0.01 and initial conditions of x=0.1 y=0 z=0
+Click on the image to see the animation of the trajectory. <br>
 ![Alt text](./lorenz_strange_attractor.svg)
 
 ## Lorenz strange attractor differential equations.
